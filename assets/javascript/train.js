@@ -1,13 +1,3 @@
-/* global firebase moment */
-// Steps to complete:
-
-// 1. Initialize Firebase
-// 2. Create button for adding new employees - then update the html + update the database
-// 3. Create a way to retrieve employees from the employee database.
-// 4. Create a way to calculate the months worked. Using difference between start and current time.
-//    Then use moment.js formatting to set difference in months.
-// 5. Calculate Total billed
-
 // 1. Initialize Firebase
   var config = {
     apiKey: "AIzaSyBUpYjzVNQy6xuwayNB2AXmzYH1aR70g1Y",
@@ -20,14 +10,14 @@
   firebase.initializeApp(config);
   var database = firebase.database();
 
-// 2. Button for adding Employees
+// 2. Button for adding 
 $("#add-train-btn").on("click", function(event) {
   event.preventDefault();
 
   // Grabs user input
   var trnName = $("#train-name-input").val().trim();
   var trnDest = $("#destination-input").val().trim();
-  var trnStart = moment($("#firstTrainTime-input").val().trim(), "HH:mm").subtract(10, "years").format("x");
+  var trnStart = moment($("#firstTrainTime-input").val().trim(), "HH:mm").subtract(1, "years").format("x");
   var trnRate = $("#frequency-input").val().trim();
   // Creates local "temporary" object for holding employee data
   var newTrn = {
@@ -54,7 +44,7 @@ $("#add-train-btn").on("click", function(event) {
   $("#frequency-input").val().trim();
 });
 
-// 3. Create Firebase event for adding employee to the database and a row in the html when a user adds an entry
+// 3. Create Firebase event for adding info to the database and a row in the html when a user adds an entry
 database.ref().on("child_added", function(childSnapshot, prevChildKey) {
 
   console.log(childSnapshot.val());
@@ -65,18 +55,16 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
   var trnStart = childSnapshot.val().firstTrainTime;
   var trnRate = childSnapshot.val().frequency;
 
-  // Employee Info
   console.log(trnName);
   console.log(trnDest);
   console.log(trnStart);
   console.log(trnRate);
 
-var tFrequency = 3;
+var tFrequency = trnRate;
 
-    // Time is 3:30 AM
-    var firstTime = "03:30";
+   
+    var firstTime = trnStart;
 
-    // First Time (pushed back 1 year to make sure it comes before current time)
     var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
     console.log(firstTimeConverted);
 
@@ -105,10 +93,4 @@ var tFrequency = 3;
   trnRate + "</td><td>" + nextTrain + "</td><td>" + tMinutesTillTrain + "</td></tr>");
 });
 
-// Example Time Math
-// -----------------------------------------------------------------------------
-// Assume Employee start date of January 1, 2015
-// Assume current date is March 1, 2016
 
-// We know that this is 15 months.
-// Now we will create code in moment.js to confirm that any attempt we use mets this test case
