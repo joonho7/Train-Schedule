@@ -42,6 +42,7 @@ $("#add-train-btn").on("click", function(event) {
   $("#destination-input").val("");
   $("#firstTrainTime-input").val("")
   $("#frequency-input").val().trim();
+  return false;
 });
 
 // 3. Create Firebase event for adding info to the database and a row in the html when a user adds an entry
@@ -60,37 +61,40 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
   console.log(trnStart);
   console.log(trnRate);
 
-var tFrequency = trnRate;
 
-   
-    var firstTime = trnStart;
 
-    var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
+
+
+    var firstTimeConverted = moment(trnStart, "HH:mm").subtract(1, "years");
     console.log(firstTimeConverted);
 
     // Current Time
     var currentTime = moment();
-    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+    console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
 
     // Difference between the times
     var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
     console.log("DIFFERENCE IN TIME: " + diffTime);
 
     // Time apart (remainder)
-    var tRemainder = diffTime % tFrequency;
+    var tRemainder = diffTime % trnRate;
     console.log(tRemainder);
 
     // Minute Until Train
-    var tMinutesTillTrain = tFrequency - tRemainder;
+    var tMinutesTillTrain = trnRate - tRemainder;
     console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
 
     // Next Train
     var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+    console.log("ARRIVAL TIME: " + moment(nextTrain).format("HH:mm"));
+
+    var convertedtime = moment(nextTrain).format("hh:mm");
+
+
 
   // Add each train's data into the table
   $("#train-table > tbody").append("<tr><td>" + trnName + "</td><td>" + trnDest + "</td><td>" +
-  trnRate + "</td><td>" + nextTrain + "</td><td>" + tMinutesTillTrain + "</td></tr>");
+  trnRate + "</td><td>" + convertedtime + "</td><td>" + tMinutesTillTrain + "</td></tr>");
 });
 
 
