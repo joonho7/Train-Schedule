@@ -17,7 +17,7 @@ $("#add-train-btn").on("click", function(event) {
   // Grabs user input
   var trnName = $("#train-name-input").val().trim();
   var trnDest = $("#destination-input").val().trim();
-  var trnStart = moment($("#firstTrainTime-input").val().trim(), "HH:mm").subtract(1, "years").format("x");
+  var trnStart =$("#firstTrainTime-input").val().trim();
   var trnRate = $("#frequency-input").val().trim();
   // Creates local "temporary" object for holding employee data
   var newTrn = {
@@ -26,6 +26,8 @@ $("#add-train-btn").on("click", function(event) {
     firstTrainTime: trnStart,
     frequency: trnRate
   };
+
+ 
 
   // Uploads employee data to the database
   database.ref().push(newTrn);
@@ -66,7 +68,7 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
 
 
     var firstTimeConverted = moment(trnStart, "HH:mm").subtract(1, "years");
-    console.log(firstTimeConverted);
+    console.log(moment(firstTimeConverted));
 
     // Current Time
     var currentTime = moment();
